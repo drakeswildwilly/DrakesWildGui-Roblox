@@ -1,0 +1,154 @@
+local player = game.Players.LocalPlayer
+-- I setup the rest of the gui from here.
+local gui = Instance.new('ScreenGui')
+gui.Parent = player.PlayerGui
+local frame = Instance.new('Frame')
+frame.Parent = gui
+frame.Size = UDim2.new(0, 400, 0, 300)
+local gradient = Instance.new('UIGradient')
+gradient.Parent = frame
+gradient.Color = ColorSequence.new({
+	ColorSequenceKeypoint.new(0, Color3.new(0.623529412,0.623529412,0.623529412)),
+	ColorSequenceKeypoint.new(1, Color3.new(0,0,0)),
+})
+gradient.Rotation = 90
+local ctp = Instance.new('TextButton')
+ctp.BackgroundColor3 = Color3.new(0.31372549,0.2,0)
+ctp.Name = "Click To Teleport"
+ctp.Parent = frame
+ctp.Position = UDim2.new(0, 10, 0, 10)
+ctp.Size = UDim2.new(0, 200, 0, 50)
+ctp.Selectable = true
+ctp.Text = "CTP Disabled"
+ctp.Transparency = 0
+ctp.ZIndex = 2
+ctp.TextColor3 = Color3.new(0,0,0)
+-- the local script about ctp needs to be added later
+local corner = Instance.new('UICorner')
+corner.Parent = ctp
+local drake = Instance.new('ImageLabel')
+drake.Parent = frame
+drake.BackgroundTransparency = 1
+drake.Position = UDim2.new(-0.75, 0, 0, 0)
+drake.Size = UDim2.new(0,1000,0,300)
+drake.Image = "rbxassetid://18739445681"
+drake.ImageTransparency = 0.83
+local label = Instance.new('TextLabel')
+label.Parent = frame
+label.BackgroundColor3 = Color3.new(0.654901961,0.654901961,0.654901961)
+label.Position = UDim2.new(0,0,0,-25)
+label.Size = UDim2.new(0,400,0,25)
+label.Text = "Roblox - Drake'sWildGui"
+label.TextXAlignment = "Left"
+label.TextColor3 = Color3.new(0,0,0)
+local button = Instance.new('TextButton')
+button.Parent = label
+button.BackgroundTransparency = 1
+button.Interactable = true
+button.Position = UDim2.new(0,350,0,-13)
+button.Size = UDim2.new(0,50,0,50)
+button.Selectable = true
+button.Text = "×"
+button.TextScaled = true
+button.TextColor3 = Color3.new(0,0,0)
+local open = Instance.new('BoolValue')
+open.Parent = button
+open.Name = "Toggle"
+open.Value = false
+
+
+-- This next script is for the Click To Teleport Function
+
+local mouse = player:GetMouse()
+local teleportEnabled = false
+
+ctp.MouseButton1Click:Connect(function()
+	if teleportEnabled then
+		-- Disable the teleport feature
+		teleportEnabled = false
+		ctp.Text = "CTP Disabled"
+	else
+		-- Enable the teleport feature
+		teleportEnabled = true
+		ctp.Text = "CTP Enabled"
+	end
+end)
+
+mouse.Button1Down:Connect(function()
+	if teleportEnabled then
+		-- Ensure the player's character and HumanoidRootPart are available
+		local character = player.Character
+		if character and character:FindFirstChild("HumanoidRootPart") then
+			-- Get the mouse's position in the world (Hit.p)
+			local targetPosition = mouse.Hit.p
+
+			-- Teleport the character's HumanoidRootPart to the mouse position
+			character.HumanoidRootPart.CFrame = CFrame.new(targetPosition)
+		end
+	end
+end)
+
+
+-- This script is for the dragging of the TextLabel.
+
+
+local UIS = game:GetService('UserInputService')
+local textLabel = label
+local dragToggle = nil
+local dragSpeed = 0.25
+local dragStart = nil
+local startPosFrame = nil
+
+local function updateInput(input)
+	local delta = input.Position - dragStart
+
+	-- Update Frame Position (TextLabel will move with the Frame)
+	local newFramePos = UDim2.new(startPosFrame.X.Scale, startPosFrame.X.Offset + delta.X,
+		startPosFrame.Y.Scale, startPosFrame.Y.Offset + delta.Y)
+	game:GetService('TweenService'):Create(frame, TweenInfo.new(dragSpeed), {Position = newFramePos}):Play()
+end
+
+textLabel.InputBegan:Connect(function(input)
+	if (input.UserInputType == Enum.UserInputType.MouseButton1 or input.UserInputType == Enum.UserInputType.Touch) then 
+		dragToggle = true
+		dragStart = input.Position
+		startPosFrame = frame.Position
+
+		input.Changed:Connect(function()
+			if input.UserInputState == Enum.UserInputState.End then
+				dragToggle = false
+			end
+		end)
+	end
+end)
+
+UIS.InputChanged:Connect(function(input)
+	if input.UserInputType == Enum.UserInputType.MouseMovement or input.UserInputType == Enum.UserInputType.Touch then
+		if dragToggle then
+			updateInput(input)
+		end
+	end
+end)
+
+--This script is for the closing/minimizing of the tab.
+
+open = true
+
+button.MouseButton1Click:Connect(function()
+	if open == true then
+		open = false 
+		frame.BackgroundTransparency = 1
+		drake.ImageTransparency = 1
+		ctp.BackgroundTransparency = 1
+		ctp.TextTransparency = 1
+		button.Rotation = 45
+		
+	else
+		open = true
+		frame.BackgroundTransparency = 0
+		drake.ImageTransparency = 0.83
+		ctp.BackgroundTransparency = 0
+		ctp.TextTransparency = 0
+		button.Rotation = 0
+	end 
+end)
