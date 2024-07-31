@@ -169,6 +169,8 @@ button.MouseButton1Click:Connect(function()
 		drake.ImageTransparency = 1
 		ctp.BackgroundTransparency = 1
 		ctp.TextTransparency = 1
+		deathbutton.BackgroundTransparency = 1
+		deathbutton.TextTransparency = 1
 		button.Rotation = 45
 		
 	else
@@ -177,6 +179,8 @@ button.MouseButton1Click:Connect(function()
 		drake.ImageTransparency = 0.83
 		ctp.BackgroundTransparency = 0
 		ctp.TextTransparency = 0
+		deathbutton.BackgroundTransparency = 0
+		deathbutton.TextTransparency = 0
 		button.Rotation = 0
 	end 
 end)
