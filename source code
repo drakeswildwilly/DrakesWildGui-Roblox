@@ -1,4 +1,16 @@
 local player = game.Players.LocalPlayer
+
+-- Wait for the player's character to be loaded
+local character = player.Character or player.CharacterAdded:Wait()
+
+local humanoid = character:FindFirstChild("Humanoid")
+if humanoid then
+	print(humanoid)
+else
+	warn("Humanoid not found")
+end
+
+
 -- I setup the rest of the gui from here.
 local gui = Instance.new('ScreenGui')
 gui.Parent = player.PlayerGui
@@ -18,7 +30,7 @@ ctp.BackgroundColor3 = Color3.new(0.31372549,0.2,0)
 ctp.Name = "Click To Teleport"
 ctp.Parent = frame
 ctp.Position = UDim2.new(0, 10, 0, 10)
-ctp.Size = UDim2.new(0, 200, 0, 50)
+ctp.Size = UDim2.new(0, 190, 0, 50)
 ctp.Selectable = true
 ctp.Text = "CTP Disabled"
 ctp.Transparency = 0
@@ -56,6 +68,21 @@ local open = Instance.new('BoolValue')
 open.Parent = button
 open.Name = "Toggle"
 open.Value = false
+local deathbutton = Instance.new('TextButton')
+deathbutton.Parent = frame
+deathbutton.BackgroundColor3 = Color3.new(0.31372549,0.2,0)
+deathbutton.Name = "Suicide Button"
+deathbutton.Position = UDim2.new(0, 200, 0, 10)
+deathbutton.Size = UDim2.new(0, 190, 0, 50)
+deathbutton.Selectable = true
+deathbutton.Text = "Suicide Button"
+deathbutton.Transparency = 0
+deathbutton.ZIndex = 2
+deathbutton.TextColor3 = Color3.new(0,0,0)
+local deathcorner = Instance.new('UICorner')
+deathcorner.Parent = deathbutton
+
+
 
 
 -- This next script is for the Click To Teleport Function
@@ -153,3 +180,22 @@ button.MouseButton1Click:Connect(function()
 		button.Rotation = 0
 	end 
 end)
+
+-- This code is for the bail button.
+
+deathbutton.MouseButton1Click:Connect(function()
+	humanoid.Health=0
+end)
+
+
+
+
+
+
+
+
+
+
+
+
+
