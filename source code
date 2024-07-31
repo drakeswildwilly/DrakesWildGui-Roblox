@@ -2,6 +2,7 @@ local player = game.Players.LocalPlayer
 -- I setup the rest of the gui from here.
 local gui = Instance.new('ScreenGui')
 gui.Parent = player.PlayerGui
+gui.ResetOnSpawn = true
 local frame = Instance.new('Frame')
 frame.Parent = gui
 frame.Size = UDim2.new(0, 400, 0, 300)
