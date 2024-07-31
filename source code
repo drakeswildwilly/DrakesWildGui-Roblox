@@ -5,7 +5,6 @@ local character = player.Character or player.CharacterAdded:Wait()
 
 local humanoid = character:FindFirstChild("Humanoid")
 if humanoid then
-	print(humanoid)
 else
 	warn("Humanoid not found")
 end
@@ -81,6 +80,21 @@ deathbutton.ZIndex = 2
 deathbutton.TextColor3 = Color3.new(0,0,0)
 local deathcorner = Instance.new('UICorner')
 deathcorner.Parent = deathbutton
+local wallbutton = Instance.new('TextButton')
+wallbutton.Parent = frame
+wallbutton.BackgroundColor3 = Color3.new(0.31372549,0.2,0)
+wallbutton.Name = "Wallhacks"
+wallbutton.Position = UDim2.new(0, 10, 0, 60)
+wallbutton.Size = UDim2.new(0, 190, 0, 50)
+wallbutton.Selectable = true
+wallbutton.Text = "Wallhacks Disabled"
+wallbutton.Transparency = 0
+wallbutton.ZIndex = 2
+wallbutton.TextColor3 = Color3.new(0,0,0)
+local wallvar = false
+local wallcorner = Instance.new('UICorner')
+wallcorner.Parent = wallbutton
+
 
 
 
@@ -171,6 +185,8 @@ button.MouseButton1Click:Connect(function()
 		ctp.TextTransparency = 1
 		deathbutton.BackgroundTransparency = 1
 		deathbutton.TextTransparency = 1
+		wallbutton.BackgroundTransparency = 1
+		wallbutton.TextTransparency = 1
 		button.Rotation = 45
 		
 	else
@@ -181,6 +197,8 @@ button.MouseButton1Click:Connect(function()
 		ctp.TextTransparency = 0
 		deathbutton.BackgroundTransparency = 0
 		deathbutton.TextTransparency = 0
+		wallbutton.BackgroundTransparency = 0
+		wallbutton.TextTransparency = 0
 		button.Rotation = 0
 	end 
 end)
@@ -191,6 +209,46 @@ deathbutton.MouseButton1Click:Connect(function()
 	humanoid.Health=0
 end)
 
+-- This code is for the wallhack toggle.
+
+wallbutton.MouseButton1Click:Connect(function()
+	if wallvar == false then
+		wallvar = true
+		wallbutton.Text = "Wallhack Enabled"
+		local players = game:GetService("Players")
+		for _, player in players:GetPlayers() do
+			local character = workspace:FindFirstChild(player.Name)
+			if character and character:FindFirstChildOfClass("Highlight") == nil then
+				local highlight = Instance.new("Highlight")
+				highlight.Parent = character
+				highlight.Adornee = character
+				highlight.OutlineColor = Color3.fromRGB(255, 255, 255)
+				highlight.FillTransparency = 0
+				highlight.OutlineTransparency = 0
+			else
+				local highlight = character:FindFirstChildOfClass("Highlight")
+				if highlight then
+					highlight.FillTransparency = 0
+					highlight.OutlineTransparency = 0
+				end
+			end
+		end
+	else
+		wallvar = false
+		wallbutton.Text = "Wallhack Disabled"
+		local players = game:GetService("Players")
+		for _, player in players:GetPlayers() do
+			local character = workspace:FindFirstChild(player.Name)
+			if character then
+				local highlight = character:FindFirstChildOfClass("Highlight")
+				if highlight then
+					highlight.FillTransparency = 1
+					highlight.OutlineTransparency = 1
+				end
+			end
+		end
+	end
+end)
 
 
 
