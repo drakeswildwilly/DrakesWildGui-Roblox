@@ -235,7 +235,7 @@ local function applyHighlightToCharacter(character)
 			local billboard = Instance.new("BillboardGui")
 			billboard.Name = "UsernameBillboard"
 			billboard.AlwaysOnTop = true
-			billboard.Size = UDim2.new(0.25, 300, 0.25, 100)
+			billboard.Size = UDim2.new(0.7, 300, 0.7, 100)
 			billboard.Adornee = head
 			billboard.Parent = character
 
@@ -314,4 +314,3 @@ end
 
 -- Ensure that new players also get the wallhack applied
 players.PlayerAdded:Connect(setupWallhack)
-
