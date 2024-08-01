@@ -202,6 +202,7 @@ button.MouseButton1Click:Connect(function()
 		deathbutton.TextTransparency = 1
 		wallbutton.BackgroundTransparency = 1
 		wallbutton.TextTransparency = 1
+		healbutton.Transparency = 1
 		button.Rotation = 45
 		
 	else
@@ -214,6 +215,7 @@ button.MouseButton1Click:Connect(function()
 		deathbutton.TextTransparency = 0
 		wallbutton.BackgroundTransparency = 0
 		wallbutton.TextTransparency = 0
+		healbutton.Transparency = 0
 		button.Rotation = 0
 	end 
 end)
@@ -356,4 +358,13 @@ healbutton.MouseButton1Click:Connect(function()
 	end
 	
 end)
+
+
+
+
+
+
+
+
+
 
