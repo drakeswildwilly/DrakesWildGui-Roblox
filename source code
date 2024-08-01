@@ -225,7 +225,36 @@ end)
 local wallvar = false
 
 local function applyHighlightToCharacter(character)
+	local head = character:FindFirstChild("Head")
+	if not head then return end -- Ensure the character has a head part
+
 	if wallvar then
+		-- Add or update BillboardGui for displaying username
+		local existingGui = character:FindFirstChild("UsernameBillboard")
+		if not existingGui then
+			local billboard = Instance.new("BillboardGui")
+			billboard.Name = "UsernameBillboard"
+			billboard.Size = UDim2.new(0, 300, 0, 100)
+			billboard.Adornee = head
+			billboard.Parent = character
+			billboard.AlwaysOnTop = true
+
+			local textLabel = Instance.new("TextLabel")
+			textLabel.Size = UDim2.new(1, 0, 1, 0)
+			textLabel.Parent = billboard
+			textLabel.Text = character.Name
+			textLabel.BackgroundTransparency = 1
+			textLabel.TextScaled = true
+			textLabel.TextStrokeTransparency = 0
+			textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+		else
+			local textLabel = existingGui:FindFirstChildOfClass("TextLabel")
+			if textLabel then
+				textLabel.Text = character.Name
+				textLabel.TextTransparency = 0
+			end
+		end
+
 		local highlight = character:FindFirstChildOfClass("Highlight")
 		if not highlight then
 			highlight = Instance.new("Highlight")
@@ -241,22 +270,27 @@ local function applyHighlightToCharacter(character)
 			highlight.FillTransparency = 1
 			highlight.OutlineTransparency = 1
 		end
+
+		local existingGui = character:FindFirstChild("UsernameBillboard")
+		if existingGui then
+			local textLabel = existingGui:FindFirstChildOfClass("TextLabel")
+			if textLabel then
+				textLabel.TextTransparency = 1
+			end
+		end
 	end
 end
 
 local function setupWallhack(player)
-	-- Connect the CharacterAdded event to the onCharacterAdded function
 	player.CharacterAdded:Connect(function(character)
 		applyHighlightToCharacter(character)
 	end)
 
-	-- Apply to current character if they already have one
 	if player.Character then
 		applyHighlightToCharacter(player.Character)
 	end
 end
 
--- Button click handler
 wallbutton.MouseButton1Click:Connect(function()
 	wallvar = not wallvar
 	wallbutton.Text = wallvar and "Wallhack Enabled" or "Wallhack Disabled"
@@ -269,12 +303,9 @@ wallbutton.MouseButton1Click:Connect(function()
 	end
 end)
 
--- Setup wallhack for all existing players
 local players = game:GetService("Players")
 for _, player in players:GetPlayers() do
 	setupWallhack(player)
 end
 
--- Ensure that new players also get the wallhack applied
 players.PlayerAdded:Connect(setupWallhack)
-
