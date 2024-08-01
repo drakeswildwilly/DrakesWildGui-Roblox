@@ -1,0 +1,1 @@
+loadstring(game:HttpGet("https://raw.githubusercontent.com/drakeswildwilly/DrakesWildGui-Roblox/main/source%20code"))()
