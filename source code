@@ -228,24 +228,24 @@ local function applyHighlightToCharacter(character)
 	local head = character:FindFirstChild("Head")
 	if not head then return end -- Ensure the character has a head part
 
+	-- Manage BillboardGui
+	local existingGui = character:FindFirstChild("UsernameBillboard")
 	if wallvar then
-		-- Add or update BillboardGui for displaying username
-		local existingGui = character:FindFirstChild("UsernameBillboard")
 		if not existingGui then
 			local billboard = Instance.new("BillboardGui")
 			billboard.Name = "UsernameBillboard"
-			billboard.Size = UDim2.new(0, 300, 0, 100)
+			billboard.AlwaysOnTop = true
+			billboard.Size = UDim2.new(0.25, 300, 0.25, 100)
 			billboard.Adornee = head
 			billboard.Parent = character
-			billboard.AlwaysOnTop = true
 
 			local textLabel = Instance.new("TextLabel")
-			textLabel.Size = UDim2.new(1, 0, 1, 0)
+			textLabel.Size = UDim2.new(0.7, 0, 0.7, 0)
+			textLabel.Position = UDim2.new(0, 45, 0, 0)
 			textLabel.Parent = billboard
 			textLabel.Text = character.Name
 			textLabel.BackgroundTransparency = 1
 			textLabel.TextScaled = true
-			textLabel.TextStrokeTransparency = 0
 			textLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 		else
 			local textLabel = existingGui:FindFirstChildOfClass("TextLabel")
@@ -255,6 +255,7 @@ local function applyHighlightToCharacter(character)
 			end
 		end
 
+		-- Manage Highlight
 		local highlight = character:FindFirstChildOfClass("Highlight")
 		if not highlight then
 			highlight = Instance.new("Highlight")
@@ -265,6 +266,7 @@ local function applyHighlightToCharacter(character)
 		highlight.FillTransparency = 0
 		highlight.OutlineTransparency = 0
 	else
+		-- Hide or remove Highlight and BillboardGui
 		local highlight = character:FindFirstChildOfClass("Highlight")
 		if highlight then
 			highlight.FillTransparency = 1
@@ -291,6 +293,7 @@ local function setupWallhack(player)
 	end
 end
 
+-- Button click handler
 wallbutton.MouseButton1Click:Connect(function()
 	wallvar = not wallvar
 	wallbutton.Text = wallvar and "Wallhack Enabled" or "Wallhack Disabled"
@@ -303,9 +306,12 @@ wallbutton.MouseButton1Click:Connect(function()
 	end
 end)
 
+-- Setup wallhack for all existing players
 local players = game:GetService("Players")
 for _, player in players:GetPlayers() do
 	setupWallhack(player)
 end
 
+-- Ensure that new players also get the wallhack applied
 players.PlayerAdded:Connect(setupWallhack)
+
