@@ -95,6 +95,20 @@ wallbutton.TextColor3 = Color3.new(0,0,0)
 local wallvar = false
 local wallcorner = Instance.new('UICorner')
 wallcorner.Parent = wallbutton
+local healbutton = Instance.new('TextButton')
+healbutton.Parent = frame
+healbutton.BackgroundColor3 = Color3.new(0.31372549,0.2,0)
+healbutton.Name = "Healbutton"
+healbutton.Position = UDim2.new(0, 200, 0, 60)
+healbutton.Size = UDim2.new(0, 190, 0, 50)
+healbutton.Selectable = true
+healbutton.Text = "Autoheal Off"
+healbutton.Transparency = 0
+healbutton.ZIndex = 2
+healbutton.TextColor3 = Color3.new(0,0,0)
+local healcorner = Instance.new('UICorner')
+healcorner.Parent = healbutton
+local healvar = false
 
 
 
@@ -239,7 +253,7 @@ local function applyHighlightToCharacter(character)
 			billboard.Adornee = head
 			billboard.Parent = character
 			billboard.DistanceLowerLimit = 10
-			billboard.MaxDistance = 100
+			billboard.MaxDistance = 200
 			
 
 			local textLabel = Instance.new("TextLabel")
@@ -317,3 +331,29 @@ end
 
 -- Ensure that new players also get the wallhack applied
 players.PlayerAdded:Connect(setupWallhack)
+
+
+
+healbutton.MouseButton1Click:Connect(function() 
+	if healvar == false then
+		healvar = true
+		healbutton.Text = "Autoheal On"
+		_G.forcefield = Instance.new('ForceField')
+		_G.forcefield.Parent = character
+		_G.forcefield.Visible = false
+		humanoid.Health = math.huge
+		humanoid.MaxHealth = math.huge
+		
+
+	else
+	
+		_G.forcefield:Destroy()
+		humanoid.Health = 100
+		humanoid.MaxHealth = 100
+		healvar = false
+		healbutton.Text = "Autoheal Off"
+		
+	end
+	
+end)
+
