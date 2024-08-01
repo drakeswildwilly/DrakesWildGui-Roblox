@@ -207,8 +207,18 @@ end)
 -- This code is for the bail button.
 
 deathbutton.MouseButton1Click:Connect(function()
-	humanoid.Health=0
+
+	if humanoid then
+		humanoid.Health = 0
+	end
+
+	-- Optionally wait for the player to respawn
+	player.CharacterAdded:Connect(function(newCharacter)
+		humanoid = newCharacter:FindFirstChildOfClass("Humanoid")
+		-- You can add any code here that needs to run after the player respawns
+	end)
 end)
+
 
 -- This code is for the wallhack toggle.
 
