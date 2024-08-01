@@ -238,6 +238,9 @@ local function applyHighlightToCharacter(character)
 			billboard.Size = UDim2.new(0.7, 300, 0.7, 100)
 			billboard.Adornee = head
 			billboard.Parent = character
+			billboard.DistanceLowerLimit = 10
+			billboard.MaxDistance = 100
+			
 
 			local textLabel = Instance.new("TextLabel")
 			textLabel.Size = UDim2.new(0.7, 0, 0.7, 0)
