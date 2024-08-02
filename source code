@@ -336,28 +336,55 @@ players.PlayerAdded:Connect(setupWallhack)
 
 
 
-healbutton.MouseButton1Click:Connect(function() 
+local function toggleHeal()
 	if healvar == false then
 		healvar = true
 		healbutton.Text = "Autoheal On"
+		-- Create and apply ForceField
 		_G.forcefield = Instance.new('ForceField')
 		_G.forcefield.Parent = character
-		_G.forcefield.Visible = false
-		humanoid.Health = math.huge
-		humanoid.MaxHealth = math.huge
-		
-
+		_G.forcefield.Visible = true
+		-- Set godmode health
+		humanoid.MaxHealth = 99999
+		humanoid.Health = 99999
 	else
-	
-		_G.forcefield:Destroy()
-		humanoid.Health = 100
+		-- Set health to a safe value before removing ForceField
 		humanoid.MaxHealth = 100
+		humanoid.Health = 100
+		wait(0.1) -- Small delay to ensure health is set
+		-- Remove ForceField
+		if _G.forcefield then
+			_G.forcefield:Destroy()
+		end
 		healvar = false
 		healbutton.Text = "Autoheal Off"
-		
 	end
-	
+end
+
+-- Connect button click to toggle function
+healbutton.MouseButton1Click:Connect(toggleHeal)
+
+-- Handle respawn by reapplying godmode if healvar is true
+player.CharacterAdded:Connect(function(char)
+	character = char
+	humanoid = character:WaitForChild("Humanoid")
+	if healvar then
+		-- Reapply ForceField and godmode health
+		_G.forcefield = Instance.new('ForceField')
+		_G.forcefield.Parent = character
+		_G.forcefield.Visible = true
+		humanoid.MaxHealth = 99999
+		humanoid.Health = 99999
+	end
 end)
+
+-- Reset health to 99999 if damaged
+humanoid.HealthChanged:Connect(function(health)
+	if healvar and health < 99999 then
+		humanoid.Health = 99999
+	end
+end)
+
 
 
 
