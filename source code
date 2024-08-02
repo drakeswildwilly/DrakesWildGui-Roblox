@@ -336,6 +336,8 @@ players.PlayerAdded:Connect(setupWallhack)
 
 
 
+local RunService = game:GetService("RunService")
+
 local function toggleHeal()
 	if healvar == false then
 		healvar = true
@@ -347,6 +349,12 @@ local function toggleHeal()
 		-- Set godmode health
 		humanoid.MaxHealth = 99999
 		humanoid.Health = 99999
+		-- Start heartbeat connection
+		_G.heartbeatConnection = RunService.Heartbeat:Connect(function()
+			if healvar and humanoid.Health < 99999 then
+				humanoid.Health = 99999
+			end
+		end)
 	else
 		-- Set health to a safe value before removing ForceField
 		humanoid.MaxHealth = 100
@@ -355,6 +363,10 @@ local function toggleHeal()
 		-- Remove ForceField
 		if _G.forcefield then
 			_G.forcefield:Destroy()
+		end
+		-- Disconnect heartbeat connection
+		if _G.heartbeatConnection then
+			_G.heartbeatConnection:Disconnect()
 		end
 		healvar = false
 		healbutton.Text = "Autoheal Off"
@@ -375,15 +387,16 @@ player.CharacterAdded:Connect(function(char)
 		_G.forcefield.Visible = true
 		humanoid.MaxHealth = 99999
 		humanoid.Health = 99999
+		-- Start heartbeat connection
+		_G.heartbeatConnection = RunService.Heartbeat:Connect(function()
+			if healvar and humanoid.Health < 99999 then
+				humanoid.Health = 99999
+			end
+		end)
 	end
 end)
 
--- Reset health to 99999 if damaged
-humanoid.HealthChanged:Connect(function(health)
-	if healvar and health < 99999 then
-		humanoid.Health = 99999
-	end
-end)
+
 
 
 
